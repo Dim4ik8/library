@@ -1,14 +1,14 @@
 import requests
 
 def main():
-    url = "https://dvmn.org/filer/canonical/1542890876/16/"
+    book_url = "https://tululu.org/txt.php?id=32168"
 
-    response = requests.get(url)
+    response = requests.get(book_url, verify=False)
     response.raise_for_status()
 
-    filename = 'dvmn.svg'
-    with open(filename, 'wb') as file:
-        file.write(response.content)
+    filename = 'mars.txt'
+    with open(filename, 'w', encoding='UTF-8') as file:
+        file.write(response.text)
 
 
 if __name__ == '__main__':
