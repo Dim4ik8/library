@@ -1,14 +1,19 @@
 import requests
+from pathlib import Path
+
 
 def main():
-    book_url = "https://tululu.org/txt.php?id=32168"
+    book_url = "https://tululu.org/txt.php"
 
-    response = requests.get(book_url, verify=False)
-    response.raise_for_status()
+    Path("books").mkdir(parents=True, exist_ok=True)
 
-    filename = 'mars.txt'
-    with open(filename, 'w', encoding='UTF-8') as file:
-        file.write(response.text)
+    for count in range(10):
+        params = {'id': count + 1}
+        response = requests.get(book_url, params=params)
+        response.raise_for_status()
+        filename = Path.cwd() / 'books' / f'id{count+1}.txt'
+        with open(filename, 'w', encoding='UTF-8') as file:
+            file.write(response.text)
 
 
 if __name__ == '__main__':
