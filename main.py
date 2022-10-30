@@ -1,11 +1,7 @@
 import requests
 from bs4_tutorial import download_txt
 from bs4 import BeautifulSoup
-
-
-def check_for_redirect(response):
-    if response.history:
-        raise requests.TooManyRedirects
+from bs4_tutorial import check_for_redirect
 
 
 def main():

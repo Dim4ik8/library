@@ -5,15 +5,24 @@ from pathvalidate import sanitize_filename
 from pathlib import Path
 
 
+def check_for_redirect(response):
+    if response.history:
+        raise requests.TooManyRedirects
+
+
 def download_txt(url, filename, folder='books/', params=None):
     response = requests.get(url, params=params)
     response.raise_for_status()
 
-    filename = sanitize_filename(filename)
-    Path(folder).mkdir(exist_ok=True)
-    with open(f'{os.path.join(folder, filename)}.txt', 'w', encoding='UTF-8') as file:
-        file.write(response.text)
-    return(f'{os.path.join(folder, filename)}.txt')
+    try:
+        check_for_redirect(response)
+        filename = sanitize_filename(filename)
+        Path(folder).mkdir(exist_ok=True)
+        with open(f'{os.path.join(folder, filename)}.txt', 'w', encoding='UTF-8') as file:
+            file.write(response.text)
+        return (f'{os.path.join(folder, filename)}.txt')
+    except requests.TooManyRedirects:
+        pass
 
 
 def main():
@@ -35,6 +44,7 @@ def main():
     print(download_txt(url_book, 'Али/би', folder='books/'))
 
     print(download_txt(url_book, 'Али\\би', folder='txt/'))
+
 
 if __name__ == '__main__':
     main()
