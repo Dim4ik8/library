@@ -1,16 +1,27 @@
 import requests
-from bs4_tutorial import download_image, parse_book_page
+from bs4_tutorial import parse_book_page
 from bs4 import BeautifulSoup
 from bs4_tutorial import check_for_redirect
-from urllib.parse import urljoin
+import argparse
 
 
 def main():
+
+    parser = argparse.ArgumentParser(
+        description='Парсим библиотеку'
+    )
+    parser.add_argument('-s', '--start_id', help='С какой страницы качать', nargs='?', default='1')
+    parser.add_argument('-e', '--end_id', help='По какую страницу качать', nargs='?', default='10')
+    args = parser.parse_args()
+
+    start = int(args.start_id)
+    end = int(args.end_id)
+
     main_url = "https://tululu.org/"
     book_url = "https://tululu.org/txt.php"
     book_start_url = 'https://tululu.org/b'
 
-    for count in range(10):
+    for count in range(start, end):
         params = {'id': count + 1}
         url = book_start_url + str(count + 1) + '/'
         response = requests.get(url)
