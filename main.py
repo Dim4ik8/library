@@ -21,12 +21,17 @@ def main():
             soup = BeautifulSoup(response.text, 'lxml')
             title_tag = soup.find('h1')
             filename = title_tag.text.split('::')[0].strip()
-            image = soup.find('div', class_='bookimage').find('img')['src']
-            image_url = urljoin(main_url, image)
-            image_title = image.split('/')[-1]
+            # image = soup.find('div', class_='bookimage').find('img')['src']
+            # image_url = urljoin(main_url, image)
+            # image_title = image.split('/')[-1]
 
-            download_image(image_url, image_title)
+            comments = soup.find_all('div', class_='texts')
+            com = [comment.find('span', class_='black') for comment in comments]
 
+            print(filename)
+            for text in com:
+                print(text.text)
+            print('='*120)
         except requests.TooManyRedirects:
             continue
 
