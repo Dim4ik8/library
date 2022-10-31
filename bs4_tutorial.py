@@ -33,6 +33,15 @@ def download_image(url, filename, folder='images'):
     with open(f'{os.path.join(folder, filename)}.jpg', 'wb') as file:
         file.write(response.content)
 
+def parse_book_page(soup):
+    book_info = {}
+    title_tag = soup.find('h1')
+    book_info['title'] = title_tag.text.split('::')[0].strip()
+    book_info['author'] = title_tag.text.split('::')[-1].strip()
+    book_info['genres'] = [genre.text for genre in soup.find('span', class_='d_book').find_all('a')]
+
+    return book_info
+
 def main():
     book_start_url = 'https://tululu.org/b'
     response = requests.get(url)
