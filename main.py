@@ -25,13 +25,17 @@ def main():
             # image_url = urljoin(main_url, image)
             # image_title = image.split('/')[-1]
 
-            comments = soup.find_all('div', class_='texts')
-            com = [comment.find('span', class_='black') for comment in comments]
-
+            # comments = soup.find_all('div', class_='texts')
+            # com = [comment.find('span', class_='black') for comment in comments]
             print(filename)
-            for text in com:
-                print(text.text)
-            print('='*120)
+            # for text in com:
+            #     print(text.text)
+
+
+            genres = [genre.text for genre in soup.find('span', class_='d_book').find_all('a')]
+            print(genres)
+            print('=' * 120)
+
         except requests.TooManyRedirects:
             continue
 
