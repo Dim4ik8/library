@@ -10,12 +10,12 @@ def main():
     parser = argparse.ArgumentParser(
         description='Парсим библиотеку'
     )
-    parser.add_argument('-s', '--start_id', help='С какой страницы качать', nargs='?', default='1')
-    parser.add_argument('-e', '--end_id', help='По какую страницу качать', nargs='?', default='10')
+    parser.add_argument('-s', '--start_id', help='С какой страницы качать', nargs='?', default='1', type=int)
+    parser.add_argument('-e', '--end_id', help='По какую страницу качать', nargs='?', default='10', type=int)
     args = parser.parse_args()
 
-    start = int(args.start_id)
-    end = int(args.end_id)
+    start = args.start_id
+    end = args.end_id
 
     main_url = "https://tululu.org/"
     book_url = "https://tululu.org/txt.php"
