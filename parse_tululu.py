@@ -31,10 +31,10 @@ def main():
             check_for_redirect(response)
             soup = BeautifulSoup(response.text, 'lxml')
 
-            info = parse_book_page(soup)
-            print('Заголовок: ', info['title'])
-            print('Автор: ', info['author'])
-            print('Жанр: ', info['genres'])
+            book_info = parse_book_page(soup)
+            print('Заголовок: ', book_info['title'])
+            print('Автор: ', book_info['author'])
+            print('Жанр: ', book_info['genres'])
             print('='*120)
 
 
