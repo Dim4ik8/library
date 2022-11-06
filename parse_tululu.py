@@ -22,8 +22,8 @@ def main():
     book_start_url = 'https://tululu.org/b'
 
     for count in range(start, end):
-        params = {'id': count + 1}
-        url = book_start_url + str(count + 1) + '/'
+
+        url = book_start_url + str(count) + '/'
         response = requests.get(url)
         response.raise_for_status()
 
