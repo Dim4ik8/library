@@ -23,7 +23,7 @@ def main():
 
     for count in range(start, end):
 
-        url = book_start_url + str(count) + '/'
+        url = f'{book_start_url}{str(count)}/'
         response = requests.get(url)
         response.raise_for_status()
 
