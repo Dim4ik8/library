@@ -1,7 +1,7 @@
 import requests
-from bs4_tutorial import parse_book_page
+from functions import parse_book_page
 from bs4 import BeautifulSoup
-from bs4_tutorial import check_for_redirect
+from functions import check_for_redirect
 import argparse
 
 
