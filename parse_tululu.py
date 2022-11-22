@@ -2,7 +2,6 @@ import time
 from urllib.parse import urljoin
 
 import requests
-from functions import parse_book_page
 from bs4 import BeautifulSoup
 from functions import check_for_redirect, download_image
 import argparse
@@ -45,18 +44,11 @@ def main():
             check_for_redirect(response)
             soup = BeautifulSoup(response.text, 'lxml')
 
-            book = parse_book_page(soup)
-            print(book)
-
             image = soup.find('div', class_='bookimage').find('img')['src']
             image_url = urljoin(url_with_image, image)
             image_title = image.split('/')[-1]
-            print(image)
-            print(image_url)
             download_image(image_url, image_title)
 
-
-            time.sleep(1)
         except requests.TooManyRedirects:
             continue
 
