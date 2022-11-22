@@ -32,8 +32,8 @@ def main():
     start = args.start_id
     end = args.end_id
 
-    main_url = "https://tululu.org/"
     book_start_url = 'https://tululu.org/b'
+    url_with_image = "https://tululu.org/b1/"
 
     for count in range(start, end):
 
@@ -49,13 +49,14 @@ def main():
             print(book)
 
             image = soup.find('div', class_='bookimage').find('img')['src']
-            image_url = urljoin(main_url, image)
+            image_url = urljoin(url_with_image, image)
             image_title = image.split('/')[-1]
+            print(image)
             print(image_url)
             download_image(image_url, image_title)
 
 
-            time.sleep(5)
+            time.sleep(1)
         except requests.TooManyRedirects:
             continue
 
