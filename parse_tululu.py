@@ -48,28 +48,12 @@ def main():
             book = parse_book_page(soup)
             print(book)
 
-            print(book)
-            print('======================')
-
-            print('Заголовок: ', book['title'])
-            print('Автор: ', book['author'])
-            print('Жанр: ', book['genres'])
-            print('=' * 120)
-
             image = soup.find('div', class_='bookimage').find('img')['src']
             image_url = urljoin(main_url, image)
             image_title = image.split('/')[-1]
             print(image_url)
             download_image(image_url, image_title)
 
-            comments = soup.find_all('div', class_='texts')
-            com = [comment.find('span', class_='black') for comment in comments]
-            for text in com:
-                print(text.text)
-
-            genres = [genre.text for genre in soup.find('span', class_='d_book').find_all('a')]
-            print(genres)
-            print('=' * 120)
 
             time.sleep(5)
         except requests.TooManyRedirects:
