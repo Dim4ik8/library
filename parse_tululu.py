@@ -3,10 +3,11 @@ from urllib.parse import urljoin
 import logging
 import requests
 from bs4 import BeautifulSoup
-from functions import check_for_redirect, download_image
+from functions import check_for_redirect, download_image, download_txt, parse_book_page
 import argparse
 
 logger = logging.getLogger()
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -33,10 +34,10 @@ def main():
     end = args.end_id
 
     book_start_url = 'https://tululu.org/b'
-    url_with_image = "https://tululu.org/b1/"
-
+    url_with_image = 'https://tululu.org/b1/'
+    url_with_text = 'https://tululu.org/txt.php'
     for count in range(start, end):
-
+        params = {'id': count}
         try:
             url = f'{book_start_url}{str(count)}/'
 
@@ -46,11 +47,15 @@ def main():
             check_for_redirect(response)
             soup = BeautifulSoup(response.text, 'lxml')
 
+            book = parse_book_page(soup)
+
             image = soup.find('div', class_='bookimage').find('img')['src']
             image_url = urljoin(url_with_image, image)
             image_title = image.split('/')[-1]
             download_image(image_url, image_title)
-            time.sleep(5)
+
+            download_txt(url_with_text, book['title'], params=params)
+            time.sleep(1)
         except requests.TooManyRedirects:
             logger.warning(f'There is no data for book number {count}..')
             continue

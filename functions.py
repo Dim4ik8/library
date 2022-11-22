@@ -13,15 +13,12 @@ def download_txt(url, filename, folder='books/', params=None):
     response = requests.get(url, params=params)
     response.raise_for_status()
 
-    try:
-        check_for_redirect(response)
-        filename = sanitize_filename(filename)
-        Path(folder).mkdir(exist_ok=True)
-        with open(f'{os.path.join(folder, filename)}.txt', 'w', encoding='UTF-8') as file:
-            file.write(response.text)
-        return (f'{os.path.join(folder, filename)}.txt')
-    except requests.TooManyRedirects:
-        pass
+    check_for_redirect(response)
+    filename = sanitize_filename(filename)
+    Path(folder).mkdir(exist_ok=True)
+    with open(f'{os.path.join(folder, filename)}.txt', 'w', encoding='UTF-8') as file:
+        file.write(response.text)
+    return (f'{os.path.join(folder, filename)}.txt')
 
 
 def download_image(url, filename, folder='images'):
