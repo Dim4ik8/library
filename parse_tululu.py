@@ -1,11 +1,12 @@
 import time
 from urllib.parse import urljoin
-
+import logging
 import requests
 from bs4 import BeautifulSoup
 from functions import check_for_redirect, download_image
 import argparse
 
+logger = logging.getLogger()
 
 def main():
     parser = argparse.ArgumentParser(
@@ -38,6 +39,7 @@ def main():
 
         try:
             url = f'{book_start_url}{str(count)}/'
+
             response = requests.get(url)
             response.raise_for_status()
 
@@ -48,15 +50,18 @@ def main():
             image_url = urljoin(url_with_image, image)
             image_title = image.split('/')[-1]
             download_image(image_url, image_title)
-
+            time.sleep(5)
         except requests.TooManyRedirects:
+            logger.warning(f'There is no data for book number {count}..')
             continue
 
         except requests.exceptions.HTTPError:
-            print('Some errors on server.. Try again')
+            logger.warning('Some errors on server.. Try again')
+            continue
 
         except requests.exceptions.ConnectionError:
-            print('Please check your internet connection')
+
+            logger.warning('Please check your internet connection')
             time.sleep(10)
 
 
