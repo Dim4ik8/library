@@ -34,13 +34,13 @@ def download_image(url, filename, folder='images'):
 
 def parse_book_page(soup):
     title_tag = soup.find('h1')
-    book_info = {
+    book = {
         'title': title_tag.text.split('::')[0].strip(),
         'author': title_tag.text.split('::')[-1].strip(),
         'genres': [genre.text for genre in soup.find('span', class_='d_book').find_all('a')]
     }
 
-    return book_info
+    return book
 
 
 def main():

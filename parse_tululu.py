@@ -45,10 +45,13 @@ def main():
             check_for_redirect(response)
             soup = BeautifulSoup(response.text, 'lxml')
 
-            book_info = parse_book_page(soup)
-            print('Заголовок: ', book_info['title'])
-            print('Автор: ', book_info['author'])
-            print('Жанр: ', book_info['genres'])
+            book = parse_book_page(soup)
+            print(book)
+            print('======================')
+
+            print('Заголовок: ', book['title'])
+            print('Автор: ', book['author'])
+            print('Жанр: ', book['genres'])
             print('=' * 120)
 
             image = soup.find('div', class_='bookimage').find('img')['src']
