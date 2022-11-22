@@ -47,6 +47,8 @@ def main():
 
             book = parse_book_page(soup)
             print(book)
+
+            print(book)
             print('======================')
 
             print('Заголовок: ', book['title'])
