@@ -16,9 +16,10 @@ def download_txt(url, filename, folder='books/', params=None):
     check_for_redirect(response)
     filename = sanitize_filename(filename)
     Path(folder).mkdir(exist_ok=True)
-    with open(f'{os.path.join(folder, filename)}.txt', 'w', encoding='UTF-8') as file:
+    file_path = os.path.join(folder, filename)
+    with open(f'{file_path)}.txt', 'w', encoding='UTF-8') as file:
         file.write(response.text)
-    return (f'{os.path.join(folder, filename)}.txt')
+    return (f'{file_path}.txt')
 
 
 def download_image(url, filename, folder='images'):
@@ -33,12 +34,14 @@ def parse_book_page(soup):
     title_tag = soup.find('h1')
     title, author = title_tag.text.split(' :: ')
     comments = soup.find_all('div', class_='texts')
+    image = soup.find('div', class_='bookimage').find('img')['src']
 
     book = {
         'title': title.strip(),
         'author': author.strip(),
         'genres': [genre.text for genre in soup.find('span', class_='d_book').find_all('a')],
-        'comments': [comment.find('span', class_='black').text for comment in comments]
+        'comments': [comment.find('span', class_='black').text for comment in comments],
+        'image': image
     }
 
     return book
