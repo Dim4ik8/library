@@ -16,10 +16,10 @@ def download_txt(url, filename, folder='books/', params=None):
     check_for_redirect(response)
     filename = sanitize_filename(filename)
     Path(folder).mkdir(exist_ok=True)
-    file_path = os.path.join(folder, filename)
-    with open(f'{file_path)}.txt', 'w', encoding='UTF-8') as file:
+    file_path = os.path.join(folder, f'{filename}.txt')
+    with open(file_path, 'w', encoding='UTF-8') as file:
         file.write(response.text)
-    return (f'{file_path}.txt')
+    return file_path
 
 
 def download_image(url, filename, folder='images'):
