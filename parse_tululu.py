@@ -34,7 +34,6 @@ def main():
     end = args.end_id
 
     book_start_url = 'https://tululu.org/b'
-    url_with_image = 'https://tululu.org/'
     url_with_text = 'https://tululu.org/txt.php'
     for count in range(start, end):
         params = {'id': count}
@@ -49,7 +48,7 @@ def main():
 
             book = parse_book_page(soup)
 
-            image_url = urljoin(url_with_image, book['image'])
+            image_url = urljoin(url, book['image'])
             image_title = book['image'].split('/')[-1]
 
             download_image(image_url, image_title)
