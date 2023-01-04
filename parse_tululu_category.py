@@ -6,7 +6,6 @@ import logging
 import re
 from functions import check_for_redirect, download_the_book
 from urllib.parse import urljoin
-from pprint import pprint
 
 logger = logging.getLogger()
 def get_links_to_books(soup):
@@ -60,3 +59,11 @@ for page in range(1, count_of_pages+1):
 
             logger.warning('Please check your internet connection')
             time.sleep(10)
+with open('books.json', 'w') as file:
+    json.dump(books, file, ensure_ascii=False)
+
+with open('books.json', 'r') as file:
+    all_books = json.load(file)
+
+for count, book in enumerate(all_books):
+    print(count+1, '---', book['title'])
