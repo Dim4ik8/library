@@ -4,66 +4,78 @@ import requests
 from bs4 import BeautifulSoup
 import logging
 import re
-from functions import check_for_redirect, download_the_book
+from functions import check_for_redirect, download_the_book, get_links_to_books, parse_book_page
 from urllib.parse import urljoin
+import argparse
 
 logger = logging.getLogger()
-def get_links_to_books(soup):
-    books = soup.find_all(class_='d_book')
-    links_to_books = [urljoin(base_url, url.find('a')['href']) for url in books]
-    return links_to_books
 
-base_url = 'https://tululu.org'
-url_to_fantasy_books = 'https://tululu.org/l55/'
-url_with_text = 'https://tululu.org/txt.php'
 
-response = requests.get(url_to_fantasy_books)
-response.raise_for_status()
+def main():
+    parser = argparse.ArgumentParser(
+        description='Парсим библиотеку'
+    )
+    parser.add_argument(
+        '-s', '--start_page',
+        help='С какой страницы качать',
+        nargs='?',
+        default='0',
+        type=int
+    )
+    parser.add_argument(
+        '-e',
+        '--end_page',
+        help='По какую страницу качать',
+        nargs='?',
+        default='701',
+        type=int
+    )
+    args = parser.parse_args()
 
-soup = BeautifulSoup(response.text, 'lxml')
-second_part_of_url = soup.find(class_='d_book').find('a')['href']
-url_to_first_book = urljoin(base_url, second_part_of_url)
+    start = args.start_page
+    end = args.end_page
 
-count_of_pages = 4
-books = []
+    base_url = 'https://tululu.org'
+    url_to_fantasy_books = 'https://tululu.org/l55/'
+    url_with_text = 'https://tululu.org/txt.php'
 
-for page in range(1, count_of_pages+1):
-    url_to_each_page = urljoin(url_to_fantasy_books, str(page))
-    response = requests.get(url_to_each_page)
-    response.raise_for_status()
-    soup = BeautifulSoup(response.text, 'lxml')
-    links_to_books = get_links_to_books(soup)
-    for link in links_to_books:
-        try:
-            id = re.findall('\d+', link)[0]
-            params = {'id': id}
-            response = requests.get(link)
-            response.raise_for_status()
+    books = []
 
-            check_for_redirect(response)
-            soup = BeautifulSoup(response.text, 'lxml')
+    for page in range(start, end + 1):
+        url_to_each_page = urljoin(url_to_fantasy_books, str(page))
+        response = requests.get(url_to_each_page)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, 'lxml')
+        links_to_books = get_links_to_books(soup, base_url)
+        for link in links_to_books:
+            try:
+                id = re.findall('\d+', link)[0]
+                params = {'id': id}
+                response = requests.get(link)
+                response.raise_for_status()
 
-            book = download_the_book(soup, link, url_with_text, params)
+                check_for_redirect(response)
+                soup = BeautifulSoup(response.text, 'lxml')
 
-            books.append(book)
+                book = download_the_book(soup, link, url_with_text, params)
 
-        except requests.TooManyRedirects:
-            logger.warning(f'There is no data for one book ..')
-            continue
+                books.append(book)
 
-        except requests.exceptions.HTTPError:
-            logger.warning('Some errors on server.. Try again')
-            continue
+            except requests.TooManyRedirects:
+                logger.warning(f'There is no data for one book ..')
+                continue
 
-        except requests.exceptions.ConnectionError:
+            except requests.exceptions.HTTPError:
+                logger.warning('Some errors on server.. Try again')
+                continue
 
-            logger.warning('Please check your internet connection')
-            time.sleep(10)
-with open('books.json', 'w') as file:
-    json.dump(books, file, ensure_ascii=False)
+            except requests.exceptions.ConnectionError:
 
-with open('books.json', 'r') as file:
-    all_books = json.load(file)
+                logger.warning('Please check your internet connection')
+                time.sleep(10)
+    with open('books.json', 'w') as file:
+        json.dump(books, file, ensure_ascii=False)
 
-for count, book in enumerate(all_books):
-    print(count+1, '---', book['title'])
+
+if __name__ == '__main__':
+    main()

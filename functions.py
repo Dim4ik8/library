@@ -8,6 +8,10 @@ def check_for_redirect(response):
     if response.history:
         raise requests.TooManyRedirects
 
+def get_links_to_books(soup, base_url):
+    books = soup.select('.d_book')
+    links_to_books = [urljoin(base_url, book.select_one('a')['href']) for book in books]
+    return links_to_books
 
 def download_txt(url, filename, folder='books/', params=None):
     response = requests.get(url, params=params)
@@ -31,26 +35,35 @@ def download_image(url, filename, folder='images'):
 
 
 def parse_book_page(soup):
-    title_tag = soup.find('h1')
-    title, author = title_tag.text.split(' :: ')
-    comments = soup.find_all('div', class_='texts')
-    image = soup.find('div', class_='bookimage').find('img')['src']
+    author_and_title_tag = soup.select_one("div[id='content'] h1")
+    title, author = author_and_title_tag.text.split('::')
+    comments_tags = soup.select('.texts')
+    genre_tags = soup.select('span.d_book a')
+    image_tag = soup.select_one('.bookimage img')
 
     book = {
         'title': title.strip(),
         'author': author.strip(),
-        'genres': [genre.text for genre in soup.find('span', class_='d_book').find_all('a')],
-        'comments': [comment.find('span', class_='black').text for comment in comments],
-        'image': image
+        'genres': [tag.text for tag in genre_tags],
+        'comments': [tag.span.text for tag in comments_tags],
+        'image': image_tag['src']
     }
 
     return book
 
 def download_the_book(soup, link_to_book, url_with_text, params):
-    title_tag = soup.find('h1')
-    title, author = title_tag.text.split(' :: ')
-    comments = soup.find_all('div', class_='texts')
-    image = soup.find('div', class_='bookimage').find('img')['src']
+    # title_tag = soup.find('h1')
+    # title, author = title_tag.text.split(' :: ')
+    author_and_title_tag = soup.select_one("div[id='content'] h1")
+    title, author = author_and_title_tag.text.split('::')
+    # comments = soup.find_all('div', class_='texts')
+    comments_tags = soup.select('.texts')
+    genre_tags = soup.select('span.d_book a')
+
+    # image = soup.find('div', class_='bookimage').find('img')['src']
+    image_tag = soup.select_one('.bookimage img')
+    image = image_tag['src']
+
     image_url = urljoin(link_to_book, image)
     image_title = image.split('/')[-1]
     download_image(image_url, image_title)
@@ -61,10 +74,11 @@ def download_the_book(soup, link_to_book, url_with_text, params):
         'author': author.strip(),
         'img_src': os.path.join('images', image_title),
         'book_path': os.path.join('books', f'{title.strip()}.txt'),
-        'genres': [genre.text for genre in soup.find('span', class_='d_book').find_all('a')],
-        'comments': [comment.find('span', class_='black').text for comment in comments]
+        'genres': [tag.text for tag in genre_tags],
+        # 'genres': [genre.text for genre in soup.find('span', class_='d_book').find_all('a')],
+        'comments': [tag.span.text for tag in comments_tags],
+        # 'comments': [comment.find('span', class_='black').text for comment in comments]
     }
-
 
     return book
 def main():
