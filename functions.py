@@ -13,24 +13,24 @@ def get_links_to_books(soup, base_url):
     links_to_books = [urljoin(base_url, book.select_one('a')['href']) for book in books]
     return links_to_books
 
-def download_txt(url, filename, folder='books/', params=None):
+def download_txt(url, filename, folder='books/', dest_folder='', params=None):
     response = requests.get(url, params=params)
     response.raise_for_status()
 
     check_for_redirect(response)
     filename = sanitize_filename(filename)
-    Path(folder).mkdir(exist_ok=True)
-    file_path = os.path.join(folder, f'{filename}.txt')
+    Path(os.path.join(f'{dest_folder}/{folder}')).mkdir(parents=True, exist_ok=True)
+    file_path = os.path.join(dest_folder, folder, f'{filename}.txt')
     with open(file_path, 'w', encoding='UTF-8') as file:
         file.write(response.text)
     return file_path
 
 
-def download_image(url, filename, folder='images'):
+def download_image(url, filename, folder='images', dest_folder=''):
     response = requests.get(url)
     response.raise_for_status()
-    Path(folder).mkdir(exist_ok=True)
-    with open(f'{os.path.join(folder, filename)}', 'wb') as file:
+    Path(os.path.join(f'{dest_folder}/{folder}')).mkdir(parents=True, exist_ok=True)
+    with open(f'{os.path.join(dest_folder, folder, filename)}', 'wb') as file:
         file.write(response.content)
 
 
@@ -51,23 +51,18 @@ def parse_book_page(soup):
 
     return book
 
-def download_the_book(soup, link_to_book, url_with_text, params):
-    # title_tag = soup.find('h1')
-    # title, author = title_tag.text.split(' :: ')
+def download_the_book(soup, link_to_book, url_with_text, params, dest_folder=''):
     author_and_title_tag = soup.select_one("div[id='content'] h1")
     title, author = author_and_title_tag.text.split('::')
-    # comments = soup.find_all('div', class_='texts')
     comments_tags = soup.select('.texts')
     genre_tags = soup.select('span.d_book a')
-
-    # image = soup.find('div', class_='bookimage').find('img')['src']
     image_tag = soup.select_one('.bookimage img')
     image = image_tag['src']
 
     image_url = urljoin(link_to_book, image)
     image_title = image.split('/')[-1]
-    download_image(image_url, image_title)
-    download_txt(url_with_text, title.strip(), params=params)
+    download_image(image_url, image_title, dest_folder=dest_folder)
+    download_txt(url_with_text, title.strip(), dest_folder=dest_folder, params=params)
 
     book = {
         'title': title.strip(),
@@ -75,9 +70,7 @@ def download_the_book(soup, link_to_book, url_with_text, params):
         'img_src': os.path.join('images', image_title),
         'book_path': os.path.join('books', f'{title.strip()}.txt'),
         'genres': [tag.text for tag in genre_tags],
-        # 'genres': [genre.text for genre in soup.find('span', class_='d_book').find_all('a')],
         'comments': [tag.span.text for tag in comments_tags],
-        # 'comments': [comment.find('span', class_='black').text for comment in comments]
     }
 
     return book
