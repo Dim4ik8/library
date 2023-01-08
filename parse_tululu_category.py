@@ -1,5 +1,6 @@
 import json
 import pathlib
+import time
 
 import requests
 from bs4 import BeautifulSoup
@@ -9,6 +10,7 @@ from functions import check_for_redirect, download_the_book, get_links_to_books
 from urllib.parse import urljoin
 import argparse
 import os
+from pathlib import Path
 
 logger = logging.getLogger()
 
@@ -49,7 +51,13 @@ def main():
         '--skip_text',
         action='store_true',
         help='Не скачивать книги',
-
+    )
+    parser.add_argument(
+        '-j',
+        '--json_path',
+        help='Путь к файлу с данными',
+        nargs='?',
+        default='',
     )
     args = parser.parse_args()
 
@@ -58,6 +66,7 @@ def main():
     dest_folder = args.dest_folder
     skip_imgs = args.skip_imgs
     skip_text = args.skip_text
+    json_path = args.json_path
 
     base_url = 'https://tululu.org'
     url_to_fantasy_books = 'https://tululu.org/l55/'
@@ -73,7 +82,7 @@ def main():
         links_to_books = get_links_to_books(soup, base_url)
         for link in links_to_books:
             try:
-                id = re.findall('\d+', link)[0]
+                id = re.findall(r'\d+', link)[0]
                 params = {'id': id}
                 response = requests.get(link)
                 response.raise_for_status()
@@ -81,12 +90,20 @@ def main():
                 check_for_redirect(response)
                 soup = BeautifulSoup(response.text, 'lxml')
 
-                book = download_the_book(soup, link, url_with_text, params, skip_imgs, skip_text, dest_folder=dest_folder)
+                book = download_the_book(
+                    soup,
+                    link,
+                    url_with_text,
+                    params,
+                    skip_imgs,
+                    skip_text,
+                    dest_folder
+                )
 
                 books.append(book)
 
             except requests.TooManyRedirects:
-                logger.warning(f'There is no data for one book ..')
+                logger.warning('There is no data for one book ..')
                 continue
 
             except requests.exceptions.HTTPError:
@@ -97,6 +114,10 @@ def main():
 
                 logger.warning('Please check your internet connection')
                 time.sleep(10)
+
+    if json_path:
+        dest_folder = json_path
+    Path(dest_folder).mkdir(exist_ok=True)
     with open(os.path.join(dest_folder, 'books.json'), 'w') as file:
         json.dump(books, file, ensure_ascii=False)
 
