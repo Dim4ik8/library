@@ -31,7 +31,7 @@ def main():
         '--end_page',
         help='По какую страницу качать',
         nargs='?',
-        default='701',
+        default='10',
         type=int
     )
     parser.add_argument(
