@@ -45,20 +45,25 @@ def main():
         help='Не скачивать картинки',
 
     )
+    parser.add_argument(
+        '--skip_text',
+        action='store_true',
+        help='Не скачивать книги',
+
+    )
     args = parser.parse_args()
 
     start = args.start_page
     end = args.end_page
     dest_folder = args.dest_folder
     skip_imgs = args.skip_imgs
+    skip_text = args.skip_text
 
     base_url = 'https://tululu.org'
     url_to_fantasy_books = 'https://tululu.org/l55/'
     url_with_text = 'https://tululu.org/txt.php'
 
     books = []
-
-    print(skip_imgs)
 
     for page in range(start, end + 1):
         url_to_each_page = urljoin(url_to_fantasy_books, str(page))
@@ -76,7 +81,7 @@ def main():
                 check_for_redirect(response)
                 soup = BeautifulSoup(response.text, 'lxml')
 
-                book = download_the_book(soup, link, url_with_text, params, skip_imgs, dest_folder=dest_folder)
+                book = download_the_book(soup, link, url_with_text, params, skip_imgs, skip_text, dest_folder=dest_folder)
 
                 books.append(book)
 

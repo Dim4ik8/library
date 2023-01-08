@@ -51,7 +51,7 @@ def parse_book_page(soup):
 
     return book
 
-def download_the_book(soup, link_to_book, url_with_text, params, skip_imgs, dest_folder=''):
+def download_the_book(soup, link_to_book, url_with_text, params, skip_imgs, skip_text, dest_folder=''):
     author_and_title_tag = soup.select_one("div[id='content'] h1")
     title, author = author_and_title_tag.text.split('::')
     comments_tags = soup.select('.texts')
@@ -63,7 +63,8 @@ def download_the_book(soup, link_to_book, url_with_text, params, skip_imgs, dest
     image_title = image.split('/')[-1]
     if not skip_imgs:
         download_image(image_url, image_title, dest_folder=dest_folder)
-    download_txt(url_with_text, title.strip(), dest_folder=dest_folder, params=params)
+    if not skip_text:
+        download_txt(url_with_text, title.strip(), dest_folder=dest_folder, params=params)
 
     book = {
         'title': title.strip(),
