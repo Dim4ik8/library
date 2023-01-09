@@ -63,15 +63,3 @@ def download_the_book(soup, link_to_book, url_with_text, params, skip_imgs, skip
 
     return book
 
-
-def main():
-    url_book = 'http://tululu.org/txt.php?id=1'
-    print(download_txt(url_book, 'Алиби'))
-
-    print(download_txt(url_book, 'Али/би', folder='books/'))
-
-    print(download_txt(url_book, 'Али\\би', folder='txt/'))
-
-
-if __name__ == '__main__':
-    main()
