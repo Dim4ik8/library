@@ -6,7 +6,8 @@ import requests
 from bs4 import BeautifulSoup
 import logging
 import re
-from functions import check_for_redirect, download_the_book, get_links_to_books
+from functions import check_for_redirect, get_links_to_books, \
+    parse_book_page, download_txt, download_image
 from urllib.parse import urljoin
 import argparse
 import os
@@ -86,21 +87,35 @@ def main():
 
                 book_id = re.findall(r'\d+', link)[0]
                 params = {'id': book_id}
+                image_tag = soup.select_one('.bookimage img')
+                image = image_tag['src']
+                image_url = urljoin(link, image)
+                image_title = image.split('/')[-1]
+
                 response = requests.get(link)
                 response.raise_for_status()
 
                 check_for_redirect(response)
                 soup = BeautifulSoup(response.text, 'lxml')
 
-                book = download_the_book(
-                    soup,
-                    link,
-                    url_with_text,
-                    params,
-                    skip_imgs,
-                    skip_text,
-                    dest_folder
-                )
+                title_author_comments_genres = parse_book_page(soup)
+
+                if not skip_imgs:
+                    image = download_image(
+                        image_url,
+                        image_title,
+                        dest_folder=dest_folder
+                    )
+
+                if not skip_text:
+                    text = download_txt(
+                        url_with_text,
+                        title_author_comments_genres['title'],
+                        dest_folder=dest_folder,
+                        params=params
+                    )
+
+                book = title_author_comments_genres | image | text
 
                 books.append(book)
 
