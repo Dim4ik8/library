@@ -75,14 +75,15 @@ def main():
     books = []
 
     for page_number in range(start, end + 1):
-        url_to_each_page = urljoin(url_to_fantasy_books, str(page_number))
-        response = requests.get(url_to_each_page)
-        response.raise_for_status()
-        check_for_redirect(response)
-        soup = BeautifulSoup(response.text, 'lxml')
-        links_to_books = get_links_to_books(soup, base_url)
-        for link in links_to_books:
-            try:
+        try:
+            url_to_each_page = urljoin(url_to_fantasy_books, str(page_number))
+            response = requests.get(url_to_each_page)
+            response.raise_for_status()
+            check_for_redirect(response)
+            soup = BeautifulSoup(response.text, 'lxml')
+            links_to_books = get_links_to_books(soup, base_url)
+            for link in links_to_books:
+
                 id = re.findall(r'\d+', link)[0]
                 params = {'id': id}
                 response = requests.get(link)
@@ -103,18 +104,17 @@ def main():
 
                 books.append(book)
 
-            except requests.TooManyRedirects:
-                logger.warning('There is no data for one book ..')
-                continue
+        except requests.TooManyRedirects:
+            logger.warning('There is no data for one book ..')
+            continue
 
-            except requests.exceptions.HTTPError:
-                logger.warning('Some errors on server.. Try again')
-                continue
+        except requests.exceptions.HTTPError:
+            logger.warning('Some errors on server.. Try again')
+            continue
 
-            except requests.exceptions.ConnectionError:
-
-                logger.warning('Please check your internet connection')
-                time.sleep(10)
+        except requests.exceptions.ConnectionError:
+            logger.warning('Please check your internet connection')
+            time.sleep(10)
 
     if json_path:
         dest_folder = json_path
