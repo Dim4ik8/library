@@ -78,6 +78,7 @@ def main():
         url_to_each_page = urljoin(url_to_fantasy_books, str(page_number))
         response = requests.get(url_to_each_page)
         response.raise_for_status()
+        check_for_redirect(response)
         soup = BeautifulSoup(response.text, 'lxml')
         links_to_books = get_links_to_books(soup, base_url)
         for link in links_to_books:
