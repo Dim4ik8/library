@@ -84,8 +84,8 @@ def main():
             links_to_books = get_links_to_books(soup, base_url)
             for link in links_to_books:
 
-                id = re.findall(r'\d+', link)[0]
-                params = {'id': id}
+                book_id = re.findall(r'\d+', link)[0]
+                params = {'id': book_id}
                 response = requests.get(link)
                 response.raise_for_status()
 
