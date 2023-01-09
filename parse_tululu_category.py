@@ -74,8 +74,8 @@ def main():
 
     books = []
 
-    for page in range(start, end + 1):
-        url_to_each_page = urljoin(url_to_fantasy_books, str(page))
+    for page_number in range(start, end + 1):
+        url_to_each_page = urljoin(url_to_fantasy_books, str(page_number))
         response = requests.get(url_to_each_page)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'lxml')
