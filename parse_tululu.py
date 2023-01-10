@@ -54,7 +54,7 @@ def main():
             download_image(image_url, image_title)
 
             download_txt(url_with_text, book['title'], params=params)
-            time.sleep(1)
+
         except requests.TooManyRedirects:
             logger.warning(f'There is no data for book number {count}..')
             continue

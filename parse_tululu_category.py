@@ -84,40 +84,51 @@ def main():
             soup = BeautifulSoup(response.text, 'lxml')
             links_to_books = get_links_to_books(soup, base_url)
             for link in links_to_books:
+                try:
+                    book_id = re.findall(r'\d+', link)[0]
+                    params = {'id': book_id}
+                    image_tag = soup.select_one('.bookimage img')
+                    image = image_tag['src']
+                    image_url = urljoin(link, image)
+                    image_title = image.split('/')[-1]
 
-                book_id = re.findall(r'\d+', link)[0]
-                params = {'id': book_id}
-                image_tag = soup.select_one('.bookimage img')
-                image = image_tag['src']
-                image_url = urljoin(link, image)
-                image_title = image.split('/')[-1]
+                    response = requests.get(link)
+                    response.raise_for_status()
 
-                response = requests.get(link)
-                response.raise_for_status()
+                    check_for_redirect(response)
+                    soup = BeautifulSoup(response.text, 'lxml')
 
-                check_for_redirect(response)
-                soup = BeautifulSoup(response.text, 'lxml')
+                    title_author_comments_genres = parse_book_page(soup)
 
-                title_author_comments_genres = parse_book_page(soup)
+                    if not skip_imgs:
+                        image = download_image(
+                            image_url,
+                            image_title,
+                            dest_folder=dest_folder
+                        )
 
-                if not skip_imgs:
-                    image = download_image(
-                        image_url,
-                        image_title,
-                        dest_folder=dest_folder
-                    )
+                    if not skip_text:
+                        text = download_txt(
+                            url_with_text,
+                            title_author_comments_genres['title'],
+                            dest_folder=dest_folder,
+                            params=params
+                        )
 
-                if not skip_text:
-                    text = download_txt(
-                        url_with_text,
-                        title_author_comments_genres['title'],
-                        dest_folder=dest_folder,
-                        params=params
-                    )
+                    book = title_author_comments_genres | image | text
 
-                book = title_author_comments_genres | image | text
+                    books.append(book)
+                except requests.TooManyRedirects:
+                    logger.warning('There is no data for one book ..')
+                    continue
 
-                books.append(book)
+                except requests.exceptions.HTTPError:
+                    logger.warning('Some errors on server.. Try again')
+                    continue
+
+                except requests.exceptions.ConnectionError:
+                    logger.warning('Please check your internet connection')
+                    time.sleep(10)
 
         except requests.TooManyRedirects:
             logger.warning('There is no data for one book ..')
