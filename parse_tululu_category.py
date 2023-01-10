@@ -98,7 +98,7 @@ def main():
                     check_for_redirect(response)
                     soup = BeautifulSoup(response.text, 'lxml')
 
-                    title_author_comments_genres = parse_book_page(soup)
+                    book_params = parse_book_page(soup)
 
                     if not skip_imgs:
                         image = download_image(
@@ -110,12 +110,12 @@ def main():
                     if not skip_text:
                         text = download_txt(
                             url_with_text,
-                            title_author_comments_genres['title'],
+                            book_params['title'],
                             dest_folder=dest_folder,
                             params=params
                         )
 
-                    book = title_author_comments_genres | image | text
+                    book = book_params | image | text
 
                     books.append(book)
                 except requests.TooManyRedirects:
