@@ -74,7 +74,6 @@ def main():
     url_with_text = 'https://tululu.org/txt.php'
 
     books = []
-
     for page_number in range(start, end + 1):
         try:
             url_to_each_page = urljoin(url_to_fantasy_books, str(page_number))
@@ -84,19 +83,19 @@ def main():
             soup = BeautifulSoup(response.text, 'lxml')
             links_to_books = get_links_to_books(soup, base_url)
             for link in links_to_books:
+                print(link)
                 try:
+                    response = requests.get(link)
+                    response.raise_for_status()
+                    check_for_redirect(response)
+                    soup = BeautifulSoup(response.text, 'lxml')
+
                     book_id = re.findall(r'\d+', link)[0]
                     params = {'id': book_id}
                     image_tag = soup.select_one('.bookimage img')
                     image = image_tag['src']
                     image_url = urljoin(link, image)
                     image_title = image.split('/')[-1]
-
-                    response = requests.get(link)
-                    response.raise_for_status()
-
-                    check_for_redirect(response)
-                    soup = BeautifulSoup(response.text, 'lxml')
 
                     book_params = parse_book_page(soup)
 
