@@ -83,7 +83,6 @@ def main():
             soup = BeautifulSoup(response.text, 'lxml')
             links_to_books = get_links_to_books(soup, base_url)
             for link in links_to_books:
-                print(link)
                 try:
                     response = requests.get(link)
                     response.raise_for_status()
@@ -146,6 +145,7 @@ def main():
     Path(dest_folder).mkdir(exist_ok=True)
     with open(os.path.join(dest_folder, 'books.json'), 'w') as file:
         json.dump(books, file, ensure_ascii=False)
+
 
 
 if __name__ == '__main__':
