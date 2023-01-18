@@ -27,7 +27,6 @@ with open(json_path, 'r') as file:
 books_for_2_col = list(chunked(books, 2))
 
 
-
 def on_reload():
     template = env.get_template('template.html')
     rendered_page = template.render(
