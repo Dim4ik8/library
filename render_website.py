@@ -1,4 +1,5 @@
 import json
+import math
 import os
 import pathlib
 from pprint import pprint
@@ -38,7 +39,8 @@ for count, books in enumerate(by_10_books_on_page):
     template = env.get_template('template.html')
     rendered_page = template.render(
         books=books,
-        count=count + 1
+        total_pages=len(by_10_books_on_page),
+        current_page=count + 1,
     )
     with open(f'pages/{page_title}', 'w', encoding="utf8") as file:
         file.write(rendered_page)
