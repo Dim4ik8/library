@@ -11,14 +11,23 @@
     <title>Книги</title>
   </head>
   <body>
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            <li class="page-item disabled"><a class="page-link" href="#">Назад</a></li>
 
+  <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if current_page == 1 %}
+                <li class="page-item disabled"><a class="page-link" href="#">Назад</a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="index{{ current_page - 1 }}.html">Назад</a></li>
+            {% endif %}
             {% for page in range(total_pages) %}
-                <li class="page-item" ><a class="page-link" href="index{{ page+1 }}.html">{{ page+1 }}</a></li>
+                <li class="page-item {% if page + 1 == current_page %}active{% endif %}">
+                <a class="page-link" href="index{{ page+1 }}.html">{{ page+1 }}</a></li>
             {% endfor %}
-            <li class="page-item"><a class="page-link" href="#">Вперед</a></li>
+            {% if current_page == total_pages %}
+                <li class="page-item disabled"><a class="page-link" href="#">Вперед</a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="index{{ current_page + 1 }}.html">Вперед</a></li>
+            {% endif %}
         </ul>
     </nav>
 
@@ -32,14 +41,14 @@
                     <div class="card mb-3" style="max-width: 540px;">
                         <div class="row no-gutters">
                             <div class="col-md-4">
-                                <img src={{ two_books[0]["img_src"] }} class="card-img" alt="Обложка книги">
+                                <img src="{{ two_books[0]["img_src"] }}" class="card-img" alt="Обложка книги">
                             </div>
 
                             <div class="col-md-8">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ two_books[0]["title"] }}</h5>
                                     <p class="card-text">{{  two_books[0]["author"] }}</p>
-                                    <p><a href= {{ two_books[0]["book_path"] }} target="_blank">Читать</a></p>
+                                    <p><a href="{{ two_books[0]["book_path"] }}" target="_blank">Читать</a></p>
                                 </div>
                             </div>
 
@@ -52,14 +61,14 @@
                         <div class="card mb-3" style="max-width: 540px;">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
-                                    <img src={{ two_books[1]["img_src"] }} class="card-img" alt="Обложка книги">
+                                    <img src="{{ two_books[1]["img_src"] }}" class="card-img" alt="Обложка книги">
                                 </div>
 
                                 <div class="col-md-8">
                                     <div class="card-body">
                                         <h5 class="card-title">{{ two_books[1]["title"] }}</h5>
                                         <p class="card-text">{{  two_books[1]["author"] }}</p>
-                                        <p><a href= {{ two_books[1]["book_path"] }} target="_blank">Читать</a></p>
+                                        <p><a href= "{{ two_books[1]["book_path"] }}" target="_blank">Читать</a></p>
                                     </div>
                                 </div>
 
