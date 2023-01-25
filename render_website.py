@@ -35,22 +35,28 @@ by_10_books_on_page = list(chunked(books_for_2_col, 5))
 for count, books in enumerate(by_10_books_on_page):
     num_of_page = count + 1
     page_title = f'index{num_of_page}.html'
+    template = env.get_template('template.html')
+    rendered_page = template.render(
+        books=books,
+        count=count + 1
+    )
+    with open(f'pages/{page_title}', 'w', encoding="utf8") as file:
+        file.write(rendered_page)
+    # def on_reload():
+    #     template = env.get_template('template.html')
+    #     rendered_page = template.render(
+    #         books=books,
+    #     )
+    #     with open(f'pages/{page_title}', 'w', encoding="utf8") as file:
+    #         file.write(rendered_page)
+    #
+    #     print("Site rebuiled")
+    #
+    #
+    # on_reload()
 
-    def on_reload():
-        template = env.get_template('template.html')
-        rendered_page = template.render(
-            books=books,
-        )
-        with open(f'pages/{page_title}', 'w', encoding="utf8") as file:
-            file.write(rendered_page)
-
-        print("Site rebuiled")
-
-
-    on_reload()
-
-server = Server()
-
-server.watch('template.html', on_reload)
-
-server.serve(root='.')
+# server = Server()
+#
+# server.watch('template.html', on_reload)
+#
+# server.serve(root='.')

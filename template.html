@@ -11,10 +11,21 @@
     <title>Книги</title>
   </head>
   <body>
-    <h1 align="center">Научная фантастика</h1>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="index1.html">1</a></li>
+            <li class="page-item"><a class="page-link" href="index2.html">2</a></li>
+            <li class="page-item"><a class="page-link" href="index3.html">3</a></li>
+            <li class="page-item"><a class="page-link" href="index4.html">4</a></li>
+            <li class="page-item"><a class="page-link" href="index5.html">5</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </nav>
+
+    <h1>Научная фантастика</h1>
 
     {% for two_books in books %}
-
 
         <div class="container">
             <div class="row">
