@@ -1,3 +1,5 @@
+import urllib.parse
+
 import requests
 import os
 from pathvalidate import sanitize_filename

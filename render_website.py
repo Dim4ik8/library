@@ -2,6 +2,7 @@ import json
 import os
 import pathlib
 from pprint import pprint
+
 from more_itertools import chunked
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -26,19 +27,27 @@ with open(json_path, 'r') as file:
 
 books_for_2_col = list(chunked(books, 2))
 
+os.makedirs('pages', exist_ok=True)
 
-def on_reload():
-    template = env.get_template('template.html')
-    rendered_page = template.render(
-        books=books_for_2_col,
-    )
-    with open('index.html', 'w', encoding="utf8") as file:
-        file.write(rendered_page)
-
-    print("Site rebuilt")
+by_10_books_on_page = list(chunked(books_for_2_col, 5))
 
 
-on_reload()
+for count, books in enumerate(by_10_books_on_page):
+    num_of_page = count + 1
+    page_title = f'index{num_of_page}.html'
+
+    def on_reload():
+        template = env.get_template('template.html')
+        rendered_page = template.render(
+            books=books,
+        )
+        with open(f'pages/{page_title}', 'w', encoding="utf8") as file:
+            file.write(rendered_page)
+
+        print("Site rebuiled")
+
+
+    on_reload()
 
 server = Server()
 
