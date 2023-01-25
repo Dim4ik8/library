@@ -13,7 +13,6 @@
   <body>
     <style>
         nav {
-            /*padding: 30px;*/
             margin: 40px;
         }
     </style>
@@ -51,6 +50,9 @@
                                 <div class="card-body">
                                     <h5 class="card-title">{{ two_books[0]["title"] }}</h5>
                                     <p class="card-text">{{  two_books[0]["author"] }}</p>
+                                    {% for genre in two_books[0]["genres"] %}
+                                            <h6><span class="badge badge-pill badge-secondary">{{  genre }}</span></h6>
+                                        {% endfor %}
                                     <p><a href="{{ two_books[0]["book_path"] }}" target="_blank">Читать</a></p>
                                 </div>
                             </div>
@@ -71,6 +73,9 @@
                                     <div class="card-body">
                                         <h5 class="card-title">{{ two_books[1]["title"] }}</h5>
                                         <p class="card-text">{{  two_books[1]["author"] }}</p>
+                                        {% for genre in two_books[1]["genres"] %}
+                                            <h6><span class="badge badge-pill badge-secondary">{{  genre }}</span></h6>
+                                        {% endfor %}
                                         <p><a href= "{{ two_books[1]["book_path"] }}" target="_blank">Читать</a></p>
                                     </div>
                                 </div>
