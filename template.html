@@ -11,7 +11,12 @@
     <title>Книги</title>
   </head>
   <body>
-
+    <style>
+        nav {
+            /*padding: 30px;*/
+            margin: 40px;
+        }
+    </style>
   <nav aria-label="Page navigation">
         <ul class="pagination">
             {% if current_page == 1 %}
@@ -30,8 +35,6 @@
             {% endif %}
         </ul>
     </nav>
-
-    <h1>Научная фантастика</h1>
 
     {% for two_books in books %}
 
