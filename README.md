@@ -50,6 +50,15 @@ python parse_tululu_category.py -s 10 -e 403 -dBest --skip_imgs --skip_text
 ```python
 python parse_tululu_category.py -s 4 -e 100 -dBest -jInfo
 ```
-Ссылка на готовую страницу с 
+Ссылка на готовую страницу со скачанными кнгами:
+
+[Научная фантастика](https://dim4ik8.github.io/library/)
+
+Для того, чтобы пользоваться книгами из библиотеки без доступа в интернет, нужно открыть файл:
+```python 
+library/pages/index1.html
+``` 
+в браузере
+
 Цель проекта
 Код написан в образовательных целях на онлайн-курсе для веб-разработчиков [dvmn.org](https://dvmn.org/).
