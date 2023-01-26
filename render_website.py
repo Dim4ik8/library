@@ -28,21 +28,9 @@ with open(json_path, 'r') as file:
 
 by_10_books_on_page = list(chunked(books, 10))
 
-
 os.makedirs('pages', exist_ok=True)
 
 
-# def on_reload(count, books):
-#     template = env.get_template('template.html')
-#     rendered_page = template.render(
-#         books=books,
-#         total_pages=len(by_10_books_on_page),
-#         current_page=count + 1,
-#     )
-#     with open(f'pages/{page_title}', 'w', encoding="utf8") as file:
-#         file.write(rendered_page)
-#
-#     print("Site rebuiled")
 def on_reload():
     for count, books in enumerate(by_10_books_on_page):
         num_of_page = count + 1
@@ -61,11 +49,9 @@ def on_reload():
 
     print('Site rebuilt')
 
+
 on_reload()
 
-
 server = Server()
-
 server.watch('template.html', on_reload)
-
 server.serve(root='.')

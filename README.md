@@ -50,5 +50,6 @@ python parse_tululu_category.py -s 10 -e 403 -dBest --skip_imgs --skip_text
 ```python
 python parse_tululu_category.py -s 4 -e 100 -dBest -jInfo
 ```
+Ссылка на готовую страницу с 
 Цель проекта
 Код написан в образовательных целях на онлайн-курсе для веб-разработчиков [dvmn.org](https://dvmn.org/).
