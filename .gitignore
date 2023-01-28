@@ -1,7 +1,4 @@
 rrr.py
-images/
-BOOKS/
-books.json
 __pycache__/
 *.py[cod]
 *$py.class
