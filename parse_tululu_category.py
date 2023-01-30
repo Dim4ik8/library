@@ -40,7 +40,7 @@ def main():
         '--dest_folder',
         help='Название папки с результатами парсинга',
         nargs='?',
-        default='pages',
+        default=pathlib.Path.cwd(),
     )
     parser.add_argument(
         '--skip_imgs',
