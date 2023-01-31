@@ -31,16 +31,15 @@ os.makedirs('pages', exist_ok=True)
 
 
 def on_reload():
-    for count, books in enumerate(books_on_page):
-        num_of_page = count + 1
+    for page, books in enumerate(books_on_page, start=1):
         books_for_two_columns = list(chunked(books, 2))
-        page_title = f'index{num_of_page}.html'
+        page_title = f'index{page}.html'
 
         template = env.get_template('template.html')
         rendered_page = template.render(
             books=books_for_two_columns,
-            total_pages=len(by_10_books_on_page),
-            current_page=count + 1,
+            total_pages=len(books_on_page),
+            current_page=page,
         )
 
         with open(f'pages/{page_title}', 'w', encoding="utf8") as file:
@@ -49,8 +48,8 @@ def on_reload():
     print('Site rebuilt')
 
 
-on_reload()
-
-server = Server()
-server.watch('template.html', on_reload)
-server.serve(root='.')
+# on_reload()
+#
+# server = Server()
+# server.watch('template.html', on_reload)
+# server.serve(root='.')
