@@ -1,5 +1,4 @@
 import json
-import pathlib
 import time
 
 import requests
@@ -41,7 +40,6 @@ def main():
         help='Название папки с результатами парсинга',
         nargs='?',
         default='',
-        # default=os.path.join(pathlib.Path.cwd(), 'media'),
     )
     parser.add_argument(
         '--skip_imgs',

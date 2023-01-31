@@ -2,7 +2,6 @@ import json
 import os
 import pathlib
 
-
 from more_itertools import chunked
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -22,7 +21,7 @@ def find(name, path):
 
 json_path = find('books.json', pathlib.Path.cwd())
 
-with open(json_path, 'r') as file:
+with open(json_path, 'r', encoding='utf-8') as file:
     books = json.load(file)
 
 by_10_books_on_page = list(chunked(books, 10))
