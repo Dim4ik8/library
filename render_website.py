@@ -22,15 +22,16 @@ def find(name, path):
 json_path = find('books.json', pathlib.Path.cwd())
 
 with open(json_path, 'r', encoding='utf-8') as file:
-    books = json.load(file)
+    books_descriptions = json.load(file)
 
-by_10_books_on_page = list(chunked(books, 10))
+book_cards_per_page = 10
+books_on_page = list(chunked(books_descriptions, book_cards_per_page))
 
 os.makedirs('pages', exist_ok=True)
 
 
 def on_reload():
-    for count, books in enumerate(by_10_books_on_page):
+    for count, books in enumerate(books_on_page):
         num_of_page = count + 1
         books_for_two_columns = list(chunked(books, 2))
         page_title = f'index{num_of_page}.html'
