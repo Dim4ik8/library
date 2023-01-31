@@ -18,7 +18,7 @@ def find(name, path):
         if name in files:
             return os.path.join(root, name)
 
-def on_reload():
+def on_reload(books_on_page, book_cards_in_column):
     for page, books in enumerate(books_on_page, start=1):
         books_in_column = list(chunked(books, book_cards_in_column))
         page_title = f'index{page}.html'
@@ -45,10 +45,10 @@ def main():
 
     os.makedirs('pages', exist_ok=True)
 
-    on_reload()
+    on_reload(books_on_page, book_cards_in_column)
 
     server = Server()
-    server.watch('template.html', on_reload)
+    server.watch('template.html', on_reload(books_on_page, book_cards_in_column))
     server.serve(root='.')
 
 if __name__ == '__main__':
