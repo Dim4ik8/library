@@ -40,7 +40,8 @@ def main():
         '--dest_folder',
         help='Название папки с результатами парсинга',
         nargs='?',
-        default=pathlib.Path.cwd(),
+        default='',
+        # default=os.path.join(pathlib.Path.cwd(), 'media'),
     )
     parser.add_argument(
         '--skip_imgs',
@@ -142,6 +143,8 @@ def main():
 
     if json_path:
         dest_folder = json_path
+    else:
+        dest_folder = 'media'
     Path(dest_folder).mkdir(exist_ok=True)
     with open(os.path.join(dest_folder, 'books.json'), 'w') as file:
         json.dump(books, file, ensure_ascii=False)

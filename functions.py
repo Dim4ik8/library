@@ -27,9 +27,11 @@ def download_txt(url, filename, folder='books/', dest_folder='', params=None):
 
     check_for_redirect(response)
     filename = sanitize_filename(filename)
-    Path(os.path.join(f'{dest_folder}/{folder}')
+
+    Path(os.path.join(f'media/{dest_folder}/{folder}')
          ).mkdir(parents=True, exist_ok=True)
-    file_path = os.path.join(dest_folder, folder, f'{filename}.txt')
+    file_path = os.path.join('media', dest_folder, folder, f'{filename}.txt')
+
     with open(file_path, 'w', encoding='UTF-8') as file:
         file.write(response.text)
     book_path = {'book_path': urllib.parse.quote('../' + os.path.relpath(file_path))}
@@ -39,11 +41,11 @@ def download_txt(url, filename, folder='books/', dest_folder='', params=None):
 def download_image(url, filename, folder='images', dest_folder=''):
     response = requests.get(url)
     response.raise_for_status()
-    Path(os.path.join(f'{dest_folder}/{folder}')
+    Path(os.path.join(f'media/{dest_folder}/{folder}')
          ).mkdir(parents=True, exist_ok=True)
-    with open(f'{os.path.join(dest_folder, folder, filename)}', 'wb') as file:
+    with open(f'{os.path.join("media", dest_folder, folder, filename)}', 'wb') as file:
         file.write(response.content)
-    image = {'img_src': urllib.parse.quote('../' + os.path.relpath(os.path.join(dest_folder, folder, filename)))}
+    image = {'img_src': urllib.parse.quote('../' + os.path.relpath(os.path.join('media', dest_folder, folder, filename)))}
     return image
 
 
