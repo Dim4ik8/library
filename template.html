@@ -40,37 +40,37 @@
             <div class="card mb-3" style="max-width: 540px;">
               <div class="row no-gutters">
                 <div class="col-md-4">
-                  <img src="{{ two_books[0]["img_src"] }}" class="card-img" alt="Обложка книги">
+                  <img src="{{ two_books["img_src"] }}" class="card-img" alt="Обложка книги">
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">
-                    <h5 class="card-title">{{ two_books[0]["title"] }}</h5>
-                    <p class="card-text">{{  two_books[0]["author"] }}</p>
-                    {% for genre in two_books[0]["genres"] %}
+                    <h5 class="card-title">{{ two_books["title"] }}</h5>
+                    <p class="card-text">{{  two_books["author"] }}</p>
+                    {% for genre in two_books["genres"] %}
                       <h6><span class="badge badge-pill badge-secondary">{{  genre }}</span></h6>
                     {% endfor %}
-                    <p><a href="{{ two_books[0]["book_path"] }}" target="_blank">Читать</a></p>
+                    <p><a href="{{ two_books["book_path"] }}" target="_blank">Читать</a></p>
                   </div>
                 </div>
 
               </div>
             </div>
           </div>
-          {% if two_books[1] %}
+          {% if two_books %}
             <div class="col">
               <div class="card mb-3" style="max-width: 540px;">
                 <div class="row no-gutters">
                   <div class="col-md-4">
-                    <img src="{{ two_books[1]["img_src"] }}" class="card-img" alt="Обложка книги">
+                    <img src="{{ two_books["img_src"] }}" class="card-img" alt="Обложка книги">
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <h5 class="card-title">{{ two_books[1]["title"] }}</h5>
-                      <p class="card-text">{{  two_books[1]["author"] }}</p>
-                      {% for genre in two_books[1]["genres"] %}
+                      <h5 class="card-title">{{ two_books["title"] }}</h5>
+                      <p class="card-text">{{  two_books["author"] }}</p>
+                      {% for genre in two_books["genres"] %}
                         <h6><span class="badge badge-pill badge-secondary">{{  genre }}</span></h6>
                       {% endfor %}
-                      <p><a href= "{{ two_books[1]["book_path"] }}" target="_blank">Читать</a></p>
+                      <p><a href= "{{ two_books["book_path"] }}" target="_blank">Читать</a></p>
                     </div>
                   </div>
 
