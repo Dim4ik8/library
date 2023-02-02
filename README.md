@@ -11,7 +11,7 @@ python -m venv venv
 и активировать его командами:
 - для Windows:
 ```python
-/venv/Scripts/Activate.ps1
+.\venv\Scripts\Activate.ps1
 ```
 - для Linux:
 ```python

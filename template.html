@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/css.style.css">
+    <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon">
 
     <title>Книги</title>
   </head>
@@ -33,56 +34,32 @@
         </ul>
       </nav>
     </div>
-    {% for two_books in books %}
-      <div class="container">
-        <div class="row">
-          <div class="col">
-            <div class="card mb-3" style="max-width: 540px;">
+
+    <div class="container">
+      <div class="row">
+        {% for book in books_catalog %}
+          <div class="col-6">
+            <div class="card mb-4" style="max-width: 540px;">
               <div class="row no-gutters">
-                <div class="col-md-4">
-                  <img src="{{ two_books["img_src"] }}" class="card-img" alt="Обложка книги">
+                <div class="col-3">
+                  <img src="../{{book.img_src|urlencode }}" class="card-img" alt="{{book.ID}}">
                 </div>
-                <div class="col-md-8">
+                <div class="col-7">
                   <div class="card-body">
-                    <h5 class="card-title">{{ two_books["title"] }}</h5>
-                    <p class="card-text">{{  two_books["author"] }}</p>
-                    {% for genre in two_books["genres"] %}
-                      <h6><span class="badge badge-pill badge-secondary">{{  genre }}</span></h6>
+                    <h5 class="card-title">{{book.title}}</h5>
+                    <h5 class="card-title">{{book.author}}</h5>
+                    {% for genre in book.genres %}
+                      <span class="badge badge-pill badge-light mb-3">{{genre}}</span>
                     {% endfor %}
-                    <p><a href="{{ two_books["book_path"] }}" target="_blank">Читать</a></p>
+                    <div><a href="../{{book.book_path}}" target="_blank"> Читать </a></div>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
-          {% if two_books %}
-            <div class="col">
-              <div class="card mb-3" style="max-width: 540px;">
-                <div class="row no-gutters">
-                  <div class="col-md-4">
-                    <img src="{{ two_books["img_src"] }}" class="card-img" alt="Обложка книги">
-                  </div>
-                  <div class="col-md-8">
-                    <div class="card-body">
-                      <h5 class="card-title">{{ two_books["title"] }}</h5>
-                      <p class="card-text">{{  two_books["author"] }}</p>
-                      {% for genre in two_books["genres"] %}
-                        <h6><span class="badge badge-pill badge-secondary">{{  genre }}</span></h6>
-                      {% endfor %}
-                      <p><a href= "{{ two_books["book_path"] }}" target="_blank">Читать</a></p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-            {% endif %}
-            <div class="w-100"></div>
-        </div>
+        {% endfor %}
       </div>
-
-    {% endfor %}
+    </div>
 
     <script src="../static/js/bootstrap.bundle.min.js"></script>
   </body>
