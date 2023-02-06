@@ -1,5 +1,3 @@
-import urllib.parse
-
 import requests
 import os
 from pathvalidate import sanitize_filename
@@ -43,9 +41,14 @@ def download_image(url, filename, folder='images', dest_folder=''):
     response.raise_for_status()
     Path(os.path.join(f'media/{dest_folder}/{folder}')
          ).mkdir(parents=True, exist_ok=True)
-    with open(f'{os.path.join("media", dest_folder, folder, filename)}', 'wb') as file:
+    with open(f'{os.path.join("media", dest_folder, folder, filename)}',
+              'wb') as file:
         file.write(response.content)
-    image = {'img_src': '../' + os.path.relpath(os.path.join('media', dest_folder, folder, filename))}
+    image = {'img_src': '../' + os.path.relpath(os.path.join('media',
+                                                             dest_folder,
+                                                             folder,
+                                                             filename
+                                                             ))}
     return image
 
 
