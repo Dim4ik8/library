@@ -34,7 +34,7 @@ def download_txt(url, filename, folder='books/', dest_folder='', params=None):
 
     with open(file_path, 'w', encoding='UTF-8') as file:
         file.write(response.text)
-    book_path = {'book_path': urllib.parse.quote('../' + os.path.relpath(file_path))}
+    book_path = {'book_path': '../' + os.path.relpath(file_path)}
     return book_path
 
 
@@ -45,7 +45,7 @@ def download_image(url, filename, folder='images', dest_folder=''):
          ).mkdir(parents=True, exist_ok=True)
     with open(f'{os.path.join("media", dest_folder, folder, filename)}', 'wb') as file:
         file.write(response.content)
-    image = {'img_src': urllib.parse.quote('../' + os.path.relpath(os.path.join('media', dest_folder, folder, filename)))}
+    image = {'img_src': '../' + os.path.relpath(os.path.join('media', dest_folder, folder, filename))}
     return image
 
 
