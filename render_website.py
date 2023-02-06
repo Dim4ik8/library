@@ -34,12 +34,12 @@ def main():
         books_descriptions = json.load(file)
 
     book_cards_per_page = 10
-    books_on_page = list(chunked(books_descriptions, book_cards_per_page))
+    book_cards_on_page = list(chunked(books_descriptions, book_cards_per_page))
 
-    on_reload(books_on_page, env)
+    on_reload(book_cards_on_page, env)
 
     server = Server()
-    server.watch('template.html', on_reload(books_on_page, env))
+    server.watch('template.html', on_reload(book_cards_on_page, env))
     server.serve(root='.')
 
 
