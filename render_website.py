@@ -7,11 +7,6 @@ from more_itertools import chunked
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from livereload import Server
 
-env = Environment(
-    loader=FileSystemLoader('.'),
-    autoescape=select_autoescape(['html', 'xml'])
-)
-
 
 def find(name, path):
     for root, dirs, files in os.walk(path):
@@ -19,7 +14,7 @@ def find(name, path):
             return os.path.join(root, name)
 
 
-def on_reload(books_on_page):
+def on_reload(books_on_page, env):
     for page, books in enumerate(books_on_page, start=1):
         page_title = f'index{page}.html'
 
@@ -34,6 +29,11 @@ def on_reload(books_on_page):
 
 
 def main():
+    env = Environment(
+        loader=FileSystemLoader('.'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+
     json_path = find('books.json', pathlib.Path.cwd())
 
     with open(json_path, 'r', encoding='utf-8') as file:
@@ -42,10 +42,10 @@ def main():
     book_cards_per_page = 10
     books_on_page = list(chunked(books_descriptions, book_cards_per_page))
 
-    on_reload(books_on_page)
+    on_reload(books_on_page, env)
 
     server = Server()
-    server.watch('template.html', on_reload(books_on_page))
+    server.watch('template.html', on_reload(books_on_page, env))
     server.serve(root='.')
 
 
