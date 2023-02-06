@@ -1,17 +1,11 @@
 import json
 import os
-import pathlib
+from pathlib import Path
 
 from more_itertools import chunked
-
+from parse_tululu_category import args
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from livereload import Server
-
-
-def find(name, path):
-    for root, dirs, files in os.walk(path):
-        if name in files:
-            return os.path.join(root, name)
 
 
 def on_reload(books_on_page, env):
@@ -33,8 +27,8 @@ def main():
         loader=FileSystemLoader('.'),
         autoescape=select_autoescape(['html', 'xml'])
     )
-
-    json_path = find('books.json', pathlib.Path.cwd())
+    Path('pages').mkdir(exist_ok=True)
+    json_path = os.path.join(args.json_folder, 'books.json')
 
     with open(json_path, 'r', encoding='utf-8') as file:
         books_descriptions = json.load(file)
