@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 from pathlib import Path
@@ -7,13 +8,29 @@ from parse_tululu_category import args
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from livereload import Server
 
-env = Environment(
+
+parser = argparse.ArgumentParser(
+    description='Дополнительный путь к файлу'
+)
+parser.add_argument(
+    '-p', '--path',
+    help='Путь к JSON файлу',
+    nargs='?',
+    default='',
+)
+
+arguments = parser.parse_args()
+path_to_json = arguments.path
+
+def on_reload():
+    env = Environment(
         loader=FileSystemLoader('.'),
         autoescape=select_autoescape(['html', 'xml'])
     )
-
-def on_reload():
-    json_path = os.path.join(args.json_folder, 'books.json')
+    if path_to_json:
+        json_path = path_to_json
+    else:
+        json_path = os.path.join(args.json_folder, 'books.json')
     with open(json_path, 'r', encoding='utf-8') as file:
         books_descriptions = json.load(file)
 
@@ -30,7 +47,6 @@ def on_reload():
         )
         with open(f'pages/{page_title}', 'w', encoding='utf8') as file:
             file.write(rendered_page)
-    print('Site rebuild')
 
 
 def main():
@@ -40,7 +56,7 @@ def main():
     on_reload()
 
     server = Server()
-    server.watch('template.html', on_reload())
+    server.watch('template.html', on_reload)
     server.serve(root='.')
 
 
