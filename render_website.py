@@ -9,29 +9,30 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from livereload import Server
 
 
-parser = argparse.ArgumentParser(
-    description='Дополнительный путь к файлу'
-)
-parser.add_argument(
-    '-p', '--path',
-    help='Путь к JSON файлу',
-    nargs='?',
-    default='',
-)
+def parse_arguments():
+    parser = argparse.ArgumentParser(
+        description='Дополнительный путь к файлу'
+    )
+    parser.add_argument(
+        '-p', '--path',
+        help='Путь к JSON файлу',
+        nargs='?',
+        default=os.path.join(args.json_folder, 'books.json'),
+    )
 
-arguments = parser.parse_args()
-path_to_json = arguments.path
+    arguments = parser.parse_args()
+    path_to_json = arguments.path
+    return path_to_json
+
 
 def on_reload():
     env = Environment(
         loader=FileSystemLoader('.'),
         autoescape=select_autoescape(['html', 'xml'])
     )
-    if path_to_json:
-        json_path = path_to_json
-    else:
-        json_path = os.path.join(args.json_folder, 'books.json')
-    with open(json_path, 'r', encoding='utf-8') as file:
+
+    path_to_json = parse_arguments()
+    with open(path_to_json, 'r', encoding='utf-8') as file:
         books_descriptions = json.load(file)
 
     book_cards_per_page = 10
@@ -50,7 +51,6 @@ def on_reload():
 
 
 def main():
-
     Path('pages').mkdir(exist_ok=True)
 
     on_reload()
