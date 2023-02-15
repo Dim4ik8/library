@@ -59,6 +59,9 @@ python render_website
 ```python
 python render_website -p /home/user/Downloads/book_decs.json
 ```
+после чего сайт будет доступен по адресу: [Онлайн библиотека](http://127.0.0.1:5500/pages/index1.html).
+
+Чтобы воспользоваться онлайн версией сайта, перейдите по [ссылке](https://dim4ik8.github.io/library/pages/index1.html) 
 
 Цель проекта
 Код написан в образовательных целях на онлайн-курсе для веб-разработчиков [dvmn.org](https://dvmn.org/).
