@@ -51,7 +51,7 @@ python parse_tululu_category.py -s 10 -e 403 -dBest --skip_imgs --skip_text
 python parse_tululu_category.py -s 4 -e 100 -dBest -jInfo
 ```
 ## Запуск 
-Чтобы запустить локальную версию сайта, необходимо ввести команду
+- Чтобы запустить локальную версию сайта, необходимо ввести команду
 ```python
 python render_website
 ```
@@ -61,7 +61,9 @@ python render_website -p /home/user/Downloads/book_decs.json
 ```
 после чего сайт будет доступен по адресу: [Онлайн библиотека](http://127.0.0.1:5500/pages/index1.html).
 
-Чтобы воспользоваться онлайн версией сайта, перейдите по [ссылке](https://dim4ik8.github.io/library/pages/index1.html) 
+- Чтобы воспользоваться онлайн версией сайта, перейдите по [ссылке](https://dim4ik8.github.io/library/pages/index1.html) 
 
-Цель проекта
+- Оффлайн версия сайта лежит в папке `pages`. Для этого не нужно запускать скрипт, просто откройте `index1.html` через браузер.
+
+## Цель проекта
 Код написан в образовательных целях на онлайн-курсе для веб-разработчиков [dvmn.org](https://dvmn.org/).
