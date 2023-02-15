@@ -19,7 +19,6 @@ def parse_arguments():
         nargs='?',
         default=os.path.join(args.json_folder, 'books.json'),
     )
-
     arguments = parser.parse_args()
     path_to_json = arguments.path
     return path_to_json
